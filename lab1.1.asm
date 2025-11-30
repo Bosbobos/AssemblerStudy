@@ -5,7 +5,7 @@ section .text
 _main:
     push ebp
     mov  ebp, esp
-    sub  esp, 44       ; выделяем 44 байта для локальных переменных (массив на 10 dword по 4 байта + dword результат), i будем хранить в регистрах-счетчиках
+    sub  esp, 24       ; выделяем 24 байта для локальных переменных (массив на 10 word по 2 байта + dword результат), i будем хранить в регистрах-счетчиках
                    
     mov ecx, 0 ; обнуляем счётчик
     mov edx, 0 ; Сюда будем суммировать все числа
@@ -19,7 +19,7 @@ _main:
     jl .while_body ; Если сравнение выдало less (<), то продолжаем цикл и прыгаем в тело цикла
     ; Если оказались здесь => не перепрыгнули в тело цикла => он закончился. Обнуляем счетчик для следующего цикла и переходим в его голову
     
-    mov dword [esp+10*4], edx
+    mov dword [esp+10*2], edx
     mov edx, 0x0
     mov eax, 1 ; sys_exit
     mov ebx, 0 ; return code = 0
@@ -39,6 +39,6 @@ _main:
     jmp .while_head
 
 .add_sum:
-    add edx, dword [esp+ecx*4]
+    add dx, word [esp+ecx*2]
     add ecx, 0x1
     jmp .while_head
